@@ -1,0 +1,13 @@
+section {
+  display: table;
+}
+
+.toolbar-button-row {
+  display: table-cell;
+  width: 490px;
+
+}
+
+.toolbar-button-row .mat-button-base {
+  margin: 0px 20px 0px 20px;
+}

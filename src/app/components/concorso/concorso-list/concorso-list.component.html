@@ -1,0 +1,103 @@
+<mat-toolbar color="primary">
+  <span class="title-center">Lista Concorsi</span>
+</mat-toolbar>
+
+<div id="filtertable" style="display: flex">
+  <mat-form-field style="display: flex; flex: 1">
+    <mat-label>Filtra per Id</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value, 'id', searchOperation.EQUALITY)" placeholder="Filter">
+  </mat-form-field>
+  <mat-form-field style="display: flex; flex: 1">
+    <mat-label>Filtra per Anno</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value, 'guAnno', searchOperation.EQUALITY)" placeholder="Filter">
+  </mat-form-field>
+  <mat-form-field style="display: flex; flex: 1">
+    <mat-label>Filtra per Numero</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value, 'guNumero', searchOperation.EQUALITY)" placeholder="Filter">
+  </mat-form-field>
+  <mat-form-field style="display: flex; flex: 1">
+    <mat-label>Filtra per Ente</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value, 'ente.descrizione', searchOperation.LIKE)" placeholder="Filter">
+  </mat-form-field>
+  <mat-form-field style="display: flex; flex: 1">
+    <mat-label>Filtra per Categoria</mat-label>
+    <mat-select #categoriaSelect (selectionChange)="applyFilter(categoriaSelect.value, 'categoria.id', searchOperation.EQUALITY)">
+      <mat-option></mat-option>
+      <mat-option *ngFor="let cat of categoriaList" [value]="cat.id">
+        {{cat.descrizione}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div style="display: flex; flex: 1"></div>
+</div>
+
+<div class="container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="guAnno">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gazzetta Ufficiale Anno</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.guAnno }}</mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="guNumero">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gazzetta Ufficiale Numero</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.guNumero}}</mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="ente.descrizione">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Ente</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.ente.descrizione}}</mat-cell>
+    </ng-container>
+
+
+
+
+    <ng-container matColumnDef="categoria.descrizione">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.categoria.descrizione }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <a routerLink="/concorso/concorso-list">
+          <button mat-icon-button color="primary">
+            <mat-icon aria-label="Azioni" matTooltip="Azioni" >menu</mat-icon>
+          </button>
+        </a>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i = index">
+        <a routerLink="/concorso/{{row.id}}/dettaglio">
+          <button mat-icon-button color="primary" >
+            <mat-icon aria-label="Info sul concorso" matTooltip="Info sul concorso" >info</mat-icon>
+          </button>
+        </a>
+        <a (click)="selectConcorso(row.id)">
+          <button mat-icon-button color="primary">
+            <mat-icon aria-label="Graduatoria Finale" matTooltip="Graduatoria Finale" >leaderboard</mat-icon>
+          </button>
+        </a>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row style="cursor: pointer" *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+  </mat-table>
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>
+
+<app-concorso-graduatoria  *ngIf="selectedConcorsoId"
+                           [concorsoId]="selectedConcorsoId" >
+</app-concorso-graduatoria>
+

@@ -1,0 +1,10 @@
+
+
+<ng-container *ngFor="let anag of anagrafiche">
+  Risulta idoneo {{anag.anagrafica.cognome}} {{anag.anagrafica.nome}} ({{anag.anagrafica.codiceFiscale}}) i cui parenti già dipendenti dell'ente {{concorsoIdonei.ente.descrizione}} sono:
+  <br/>
+  <ng-container *ngFor="let pare of anag.parenteList">
+      {{pare.anagrafica.cognome}} {{pare.anagrafica.nome}} ({{pare.anagrafica.codiceFiscale}}) con il grado di parentela {{pare.gradoParentela.descrizione}}
+  </ng-container>
+  <br/>
+</ng-container>

@@ -1,0 +1,13 @@
+<br/>
+<img [src]="imageToShow" alt="Captcha Image" />
+<input type="text" class="form-control" id="userCaptcha"
+       required
+       [(ngModel)]="usc"
+       (blur)="notifyForm()"
+       name="userCaptcha"
+       #desc="ngModel">
+
+<div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
+  Il captcha è obbligatorio
+</div>
+<br/>

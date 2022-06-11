@@ -1,0 +1,54 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="over" [fixedInViewport]="true" opened mode="side">
+    <mat-accordion>
+      <a mat-button style="text-align: center">
+        <mat-icon [routerLink]="['/home']">
+          Home
+        </mat-icon>
+      </a>
+
+
+      <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
+        <li class="nav-item">
+          <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
+        </li>
+        <li class="nav-item">
+          <a href="/login" class="nav-link" routerLink="login">Login</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+        <li class="nav-item">
+          <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
+        </li>
+        <li class="nav-item">
+          <a href class="nav-link" (click)="logout()">LogOut</a>
+        </li>
+      </ul>
+
+
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Concorsi Genealogici
+          </mat-panel-title>
+          <mat-panel-description>
+            Parentele negli enti e nei concorsi
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-button [routerLink]="['/ente/ente-list']">Lista Enti</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-button [routerLink]="['/concorso/concorso-list']">Lista Concorsi</a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+
+    
+    </mat-accordion>
+  </mat-sidenav>
+  <app-web-socket></app-web-socket>
+  <router-outlet></router-outlet>
+  <app-messages></app-messages>
+</mat-sidenav-container>

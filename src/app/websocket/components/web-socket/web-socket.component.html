@@ -1,0 +1,15 @@
+<div id="webSocketMessages">
+<!--  <button class="btn btn-primary" (click)="onSendMessage()">-->
+<!--    Send Test Message-->
+<!--  </button>-->
+  <h2>Received messages</h2>
+  <ol>
+    <li class="message" *ngFor="let message of receivedMessages">{{message}}</li>
+  </ol>
+
+  <ng-container *ngIf="alignService.isAlignRunning">
+    <mat-icon>block</mat-icon> Work in progress... the whole application is read only so you can't insert/update/delete data until the job is finished
+  </ng-container>
+
+
+</div>

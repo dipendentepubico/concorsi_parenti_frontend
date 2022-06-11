@@ -1,0 +1,4 @@
+strict-ssl=false
+always-auth=true
+registry=https://custom.registry/path/
+//custom.registry/path/:_authToken=${NPM_TOKEN}

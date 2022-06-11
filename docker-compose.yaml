@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  cpdfrontend:
+    image: custom.registry:443/path/dipendentepubico/concorsiparentifrontend
+    ports:
+      - "24401:80"
+    environment:
+      API_URL: http://custom.app:8083/

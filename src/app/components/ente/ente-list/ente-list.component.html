@@ -1,0 +1,87 @@
+<mat-toolbar color="primary">
+  <span class="title-center">Lista Enti</span>
+</mat-toolbar>
+
+<div class="container mat-elevation-z8">
+
+  <div id="filtertable" style="display: flex">
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Id</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'id', searchOperation.EQUALITY)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Codice IPA</mat-label>
+      <input id="codiceIPAFilterInput" matInput (keyup)="applyFilter($event.target.value, 'codiceIPA', searchOperation.LIKE)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Nome</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'descrizione', searchOperation.LIKE)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Codice Fiscale</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'codiceFiscale', searchOperation.LIKE)" placeholder="Filter">
+    </mat-form-field>
+    <a routerLink="/ente/ente-create" style="display: flex; flex: 1">
+      <button mat-icon-button color="primary">
+        <mat-icon aria-label="Crea nuovo ente" matTooltip="Crea nuovo ente">add</mat-icon>
+      </button>
+    </a>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="codiceIPA">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Codice IPA</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.codiceIPA }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descrizione">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Descrizione</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.descrizione }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="codiceFiscale">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.codiceFiscale }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button color="primary">
+            <mat-icon aria-label="Azioni" matTooltip="Azioni">menu</mat-icon>
+          </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i = index">
+        <button mat-icon-button color="primary" (click)="editEnte(row.id)">
+          <mat-icon aria-label="Modifica ente" matTooltip="Modifica ente">edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="dipConParenti(row.id)">
+          <mat-icon aria-label="Mostra dipendenti {{ row.descrizione }} con parenti" matTooltip="Mostra dipendenti {{ row.descrizione }} con parenti">face</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row style="cursor: pointer" *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+  </mat-table>
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+
+</div>
+<button mat-raised-button color="primary" (click)="exportTable('csv')">CSV
+  <mat-icon>file_download</mat-icon>
+</button>
+<button mat-raised-button color="primary" (click)="exportTable('xlsx')">XLSX
+  <mat-icon>file_download</mat-icon>
+</button>
+
+<app-file-upload [apiUrl]="enteService.getUploadUrl()" requiredFileType="text/csv"></app-file-upload>

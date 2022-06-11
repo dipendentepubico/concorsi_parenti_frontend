@@ -1,0 +1,57 @@
+<mat-toolbar color="primary">
+    <span class="title-center">Lista Dipendenti Parenti in ente {{ ente?.descrizione }}</span>
+</mat-toolbar>
+
+
+<div class="container mat-elevation-z8">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Filtra"
+      (keyup)="applyFilter($event.target.value)"
+    />
+  </mat-form-field>
+  <br/>
+  <mat-form-field>
+    <mat-label>Seleziona data</mat-label>
+    <input matInput [matDatepicker]="picker"
+           (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)"
+    >
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="codiceFiscale">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.codiceFiscale }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="cognome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cognome</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.cognome }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.nome }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row style="cursor: pointer" *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+  </mat-table>
+  <mat-paginator
+    [length]="100"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>
+

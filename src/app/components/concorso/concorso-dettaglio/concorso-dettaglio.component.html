@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <span class="title-center">Informazioni sul concorso</span>
+</mat-toolbar>
+
+<ng-container *ngIf="concorso">
+  <div>
+    Il concorso è stato pubblicato sulla Gazzetta ufficiale n°{{concorso.guNumero}} del {{concorso.guAnno}} dall'Ente {{concorso.ente.descrizione}} per profilo {{concorso.categoria.descrizione}}
+  </div>
+
+  <app-concorso-parenti [concorsoIdonei] = concorso ></app-concorso-parenti>
+
+
+
+</ng-container>

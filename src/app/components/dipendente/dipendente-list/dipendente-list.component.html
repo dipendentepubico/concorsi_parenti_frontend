@@ -1,0 +1,146 @@
+<mat-accordion class="example-headers-align" multi>
+  <mat-expansion-panel #dipeListPanel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Lista dipendenti
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+<div class="container mat-elevation-z8">
+
+  <div id="filtertable" style="display: flex">
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Id</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'id', searchOperation.EQUALITY)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Nome</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'anagrafica.nome', searchOperation.LIKE)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per Cognome</mat-label>
+      <input matInput (keyup)="applyFilter($event.target.value, 'anagrafica.cognome', searchOperation.LIKE)" placeholder="Filter">
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per data inizio</mat-label>
+      <input matInput [matDatepicker]="pickerDataInizio" #inputDataInizio
+             (dateInput)="applyFilter($event.target.value, 'dataInizio', searchOperation.GREATER_THAN)"
+      >
+      <mat-datepicker-toggle matSuffix [for]="pickerDataInizio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataInizio></mat-datepicker>
+      <mat-datepicker-toggle matSuffix (click)="clearDatePickerFilter('dataInizio', pickerDataInizio)">
+        <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+      </mat-datepicker-toggle>
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per data fine</mat-label>
+      <input matInput [matDatepicker]="pickerDataFine" #inputDataFine
+             (dateInput)="applyFilter($event.target.value, 'dataFine', searchOperation.LESS_THAN)"
+      >
+      <mat-datepicker-toggle matSuffix [for]="pickerDataFine"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataFine></mat-datepicker>
+      <mat-datepicker-toggle matSuffix (click)="clearDatePickerFilter('dataFine',pickerDataFine)">
+        <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+      </mat-datepicker-toggle>
+    </mat-form-field>
+    <mat-form-field style="display: flex; flex: 1">
+      <mat-label>Filtra per categoria</mat-label>
+        <mat-select #categoriaSelect (selectionChange)="applyFilter(categoriaSelect.value, 'categoria.id', searchOperation.EQUALITY)">
+          <mat-option></mat-option>
+          <mat-option *ngFor="let cat of categoriaList" [value]="cat.id">
+            {{cat.descrizione}}
+          </mat-option>
+        </mat-select>
+
+    </mat-form-field>
+
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.nome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.nome }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.cognome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cognome</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.cognome }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.codiceFiscale">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.codiceFiscale }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dataInizio">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Data Inizio</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.dataInizio | date: 'longDate' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dataFine">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Data Fine</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.dataFine | date: 'longDate' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="categoria.descrizione">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.categoria.descrizione }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary">
+          <mat-icon aria-label="Azioni" matTooltip="Azioni">menu</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i = index">
+        <button mat-icon-button color="primary" (click)="editDipendente(row.id)">
+          <mat-icon aria-label="Modifica dipendente" matTooltip="Modifica dipendente">edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="deleteDipendente(row.id)">
+          <mat-icon aria-label="Elimina dipendente" matTooltip="Elimina dipendente">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row style="cursor: pointer" *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+  </mat-table>
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>
+    <button mat-raised-button color="primary" (click)="exportTable('csv')">CSV</button>
+    <button mat-raised-button color="primary" (click)="exportTable('xlsx')">XLSX</button>
+
+<label for="addDipendente">Inserisci un nuovo dipendente</label>
+<button mat-icon-button color="primary" (click)="addNewDipendente()" id="addDipendente">
+  <mat-icon aria-label="Aggiungi nuovo dipendente" matTooltip="Aggiungi nuovo dipendente">add</mat-icon>
+</button>
+
+
+
+
+</mat-expansion-panel>
+
+
+    <mat-expansion-panel #dipePanel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Inserisci o modifica dipendente
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+        <app-dipendente-edit [enteId]="enteId" [dipendenteId]="selectedDipendenteId" (done)="toggleList($event)" ></app-dipendente-edit>
+
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,110 @@
+<mat-toolbar color="primary">
+  <span class="title-center">Graduatoria Finale del {{graduatoria?.data | date: 'longDate'}}</span>
+</mat-toolbar>
+<div>
+  Concorso n{{graduatoria?.concorso.guNumero}}/{{graduatoria?.concorso.guAnno}} presso l'ente {{graduatoria?.concorso.ente.descrizione}} profilo {{graduatoria?.concorso.categoria.descrizione}}.
+</div>
+
+<div class="container mat-elevation-z8">
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" multiTemplateDataRows
+             matTableFilter
+             [exampleEntity]="filterEntity"
+             >
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header >Id
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Id" [(ngModel)]="filterEntity.id">
+        </mat-form-field>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="posizione">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Posizione
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Posizione" [(ngModel)]="filterEntity.posizione">
+        </mat-form-field>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.posizione }}
+        <button mat-icon-button color="primary" >
+          <mat-icon *ngIf="row.vincitore" aria-label="Vincitore" matTooltip="Vincitore" >emoji_events</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.codiceFiscale">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Codice Fiscale" [(ngModel)]="filterEntity.anagrafica.codiceFiscale">
+        </mat-form-field>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.codiceFiscale }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.cognome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cognome
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Cognome" [(ngModel)]="filterEntity.anagrafica.cognome">
+        </mat-form-field></mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.cognome }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anagrafica.nome">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nome
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Nome" [(ngModel)]="filterEntity.anagrafica.nome">
+        </mat-form-field>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.anagrafica.nome }}</mat-cell>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary">
+          <mat-icon aria-label="Azioni" matTooltip="Azioni" >menu</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i = index">
+      <button mat-icon-button color="primary" (click)="expandAnagrafica(row)">
+        <mat-icon aria-label="Visualizza parenti" matTooltip="Visualizza parenti">face</mat-icon>
+      </button>
+
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <div class="example-element-detail"
+             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <app-concorso-idoneo-parenti  [parenti]="parentiAnagrafica"  >
+          </app-concorso-idoneo-parenti>
+
+        </div>
+      </td>
+    </ng-container>
+
+
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+        class="example-element-row"
+             [class.example-expanded-row]="expandedElement === row"
+        >
+    </mat-row>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+
+  </mat-table>
+  <mat-paginator
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>

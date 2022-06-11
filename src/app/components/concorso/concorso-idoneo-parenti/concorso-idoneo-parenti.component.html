@@ -1,0 +1,9 @@
+<div *ngIf="parenti?.length>0; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+  <ng-container *ngFor="let parente of parenti">
+    {{parente.gradoParentela.descrizione}}  {{parente.anagrafica.codiceFiscale}} {{parente.anagrafica.cognome}} {{parente.anagrafica.nome}}
+  </ng-container>
+</ng-template>
+<ng-template #elseBlock>
+  <ng-container>Nessun parente</ng-container>
+</ng-template>

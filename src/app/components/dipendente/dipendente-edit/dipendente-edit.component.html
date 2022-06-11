@@ -1,0 +1,63 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div id="filtertable" style="display: flex; flex-direction: column">
+    <ng-container *ngIf="!isEdit">
+      <mat-form-field>
+        <input type="text" placeholder="Inserici codice fiscale o cognome<spazio>nome" matInput formControlName="idAnagrafica"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of anagraficaOptions  | async" [value]="option">
+            {{option.descrizione}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="isEdit">
+      {{dipEdi.nominativo}}
+    </ng-container>
+
+    <mat-form-field style="display: flex; flex: 1">
+      <label for="dataInizio">Data Inizio: </label>
+      <input id="dataInizio" matInput [matDatepicker]="pickerDataInizio" #inputDataInizio formControlName="dataInizio"  >
+      <mat-datepicker-toggle matSuffix [for]="pickerDataInizio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataInizio></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field style="display: flex; flex: 1">
+      <label for="dataFine">Data Fine: </label>
+      <input id="dataFine" matInput [matDatepicker]="pickerDataFine" #inputdataFine formControlName="dataFine" >
+      <mat-datepicker-toggle matSuffix [for]="pickerDataFine"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDataFine></mat-datepicker>
+    </mat-form-field>
+
+    <mat-label>Categoria</mat-label>
+    <mat-select #categoriaSelect formControlName="idCategoria"  >
+      <mat-option></mat-option>
+      <mat-option *ngFor="let cat of categoriaList" [value]="cat.id">
+        {{cat.descrizione}}
+      </mat-option>
+    </mat-select>
+
+    <mat-form-field style="display: flex; flex: 1">
+      <label for="link">Link: </label>
+      <input matInput id="link" type="text" formControlName="link" >
+    </mat-form-field>
+  </div>
+
+  <section>
+    <div class="toolbar-button-row">
+      <button mat-raised-button color="primary" type="submit" aria-label="Submit" [disabled]="!formGroup.valid">
+        Submit
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" type="button" aria-label="Cancel" (click)="cancel()">
+        Cancel
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+  </section>
+</form>
+
+
+
+<p>Form Value: {{ formGroup.value }}</p>
+<p>Form Status: {{ formGroup.status }}</p>

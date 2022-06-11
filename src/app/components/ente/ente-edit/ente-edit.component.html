@@ -1,0 +1,39 @@
+<p>Modifica Ente</p>
+
+Allineato <ng-container *ngIf="ente.allineato; else loggedOut">
+  <mat-icon>verified</mat-icon>
+</ng-container>
+<ng-template #loggedOut>
+  <mat-icon>unpublished</mat-icon>
+</ng-template>
+
+<div class="form-group">
+  <form (ngSubmit)="onSubmit()" #enteForm="ngForm">
+    <label for="description">Descrizione</label>
+    <input type="text" class="form-control" id="description"
+           required
+           [(ngModel)]="ente.descrizione" name="description"
+           #desc="ngModel">
+    <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
+      La descrizione è obbligatoria
+    </div>
+    <label for="codiceFiscale">Codice Fiscale</label>
+    <input type="text" class="form-control" id="codiceFiscale"
+           [(ngModel)]="ente.codiceFiscale" name="codiceFiscale"
+           #desc="ngModel">
+    <label for="codiceIPA">Codice IPA</label>
+    <input type="text" class="form-control" id="codiceIPA"
+           [(ngModel)]="ente.codiceIPA" name="codiceIPA"
+           #desc="ngModel">
+    <app-captcha
+        (captchaEntered)="receiveUserCaptcha($event)"
+
+    ></app-captcha>
+    <button type="submit" class="btn btn-success" *appUserRole="[role.administrator, role.moderator ]" [disabled]="!enteForm.form.valid">Submit</button>
+
+  </form>
+</div>
+
+<ng-container *ngIf="ente.id">
+  <app-dipendente-list [enteId] = "ente.id" ></app-dipendente-list>
+</ng-container>
